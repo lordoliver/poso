@@ -8,6 +8,7 @@ angular.module('Poso.Directive').
       scope: {
         obj: "="
       },
+
       replace: true,
       templateUrl: 'app/partials/boardField.html',
       link: function (scope, element, attr) {

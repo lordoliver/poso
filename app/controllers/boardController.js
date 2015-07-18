@@ -1,9 +1,8 @@
 angular.module('Poso.Controller')
   .controller('boardController',
-  ['$scope','$element','boardActionService','$compile','computerService','FieldFactory',
-    function ($scope,$element,boardActionService,$compile,computerService,FieldFactory) {
+  ['$scope','$element','boardActionService','$compile','computerService','FieldFactory','$q','$timeout',
+    function ($scope,$element,boardActionService,$compile,computerService,FieldFactory,$q,$timeout) {
       'use strict';
-
 
       var borderFields = 8;
       var maxNumber = 16;
@@ -22,11 +21,8 @@ angular.module('Poso.Controller')
           fields[x] = [];
         }
         for(x = 0; x < borderFields; x++){
-          var line = $("<tr/>");
-          //$element.append(line);
           for(y = 0; y < borderFields; y++){
             fields[x][y] = new FieldFactory(numbers.pop(),{ x:x, y:y });
-            //line.append($scope.fields[x][y]); 
           } 
         }
         computerService.fields = fields;
@@ -55,6 +51,10 @@ angular.module('Poso.Controller')
           }
         return numbers;
       }
+
+        function createPopup() {
+
+        }
 
       this.createFields();
       boardActionService.nextPlayer();
