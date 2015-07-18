@@ -1,0 +1,9 @@
+<td ng-class="{
+	'red': negative && !obj.taken,
+	'green': !negative && !obj.taken, 
+	'disabled': !obj.active
+	}" ng-click="take()">
+	<b>
+		<i>{{absVal}}</i>
+	</b>
+</td>
