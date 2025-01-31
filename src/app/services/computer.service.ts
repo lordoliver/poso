@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import { Field } from '../interfaces/field.interface';
 import { BoardActionService } from './board-action.service';
+import { PlayerService } from './player.service';
 
 @Injectable({
   providedIn: 'root'
@@ -8,7 +9,10 @@ import { BoardActionService } from './board-action.service';
 export class ComputerService {
   fields: Field[][] = [];
 
-  constructor(private boardActionService: BoardActionService) {}
+  constructor(
+    private boardActionService: BoardActionService,
+    private playerService: PlayerService
+  ) {}
 
   private getSelectable(): Field[] {
     const selectable: Field[] = [];
@@ -47,6 +51,10 @@ export class ComputerService {
       this.boardActionService.setMove(selectedField.position);
       this.boardActionService.nextPlayer();
     }
+  }
+
+  isComputerTurn(): boolean {
+    return this.playerService.getCurrentPlayer().type === 'computer';
   }
 
   computerMove(): Promise<void> {

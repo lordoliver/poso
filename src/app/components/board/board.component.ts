@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { BoardFieldComponent } from '../board-field/board-field.component';
 import { Field, Position } from '../../interfaces/field.interface';
-import { FieldService, BoardActionService, ComputerService } from '../../services';
+import { FieldService, BoardActionService, ComputerService, PlayerService } from '../../services';
 
 @Component({
   selector: 'app-board',
@@ -40,12 +40,19 @@ export class BoardComponent implements OnInit {
   constructor(
     private fieldService: FieldService,
     private boardActionService: BoardActionService,
-    private computerService: ComputerService
+    private computerService: ComputerService,
+    private playerService: PlayerService
   ) {}
 
   ngOnInit(): void {
     this.createFields();
-    this.boardActionService.nextPlayer();
+    if (this.computerService.isComputerTurn()) {
+      this.computerService.computerMove();
+    }
+  }
+
+  isComputerTurn(): boolean {
+    return this.playerService.getCurrentPlayer().type === 'computer';
   }
 
   private createFields(): void {
