@@ -42,7 +42,12 @@ export class ComputerService {
     }
   }
 
-  computerMove(): void {
-    setTimeout(() => this.move(), 500);
+  computerMove(): Promise<void> {
+    return new Promise(resolve => {
+      setTimeout(() => {
+        this.move();
+        resolve();
+      }, 500);
+    });
   }
 }

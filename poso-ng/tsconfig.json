@@ -1,5 +1,8 @@
 {
-  "compileOptions": {
+  "include": [
+    "src/**/*.ts"
+  ],
+  "compilerOptions": {
     "baseUrl": "./",
     "outDir": "./dist/out-tsc",
     "forceConsistentCasingInFileNames": true,

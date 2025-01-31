@@ -1,8 +1,8 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { BoardFieldComponent } from './board-field.component';
-import { ComputerService } from '../../services/computer.service';
-import { BoardActionService } from '../../services/board-action.service';
+import { ComputerService, BoardActionService } from '../../services';
 import { Field } from '../../interfaces/field.interface';
+import { BehaviorSubject } from 'rxjs';
 
 describe('BoardFieldComponent', () => {
   let component: BoardFieldComponent;
@@ -10,9 +10,22 @@ describe('BoardFieldComponent', () => {
   let boardActionService: BoardActionService;
 
   beforeEach(async () => {
+    const mockBoardActionService = {
+      isEnabled: () => true,
+      setMove: () => {},
+      nextPlayer: () => {},
+      currentPlayer$: new BehaviorSubject(1)
+    };
+    const mockComputerService = {
+      computerMove: () => Promise.resolve()
+    };
+
     await TestBed.configureTestingModule({
       imports: [BoardFieldComponent],
-      providers: [ComputerService, BoardActionService]
+      providers: [
+        { provide: ComputerService, useValue: mockComputerService },
+        { provide: BoardActionService, useValue: mockBoardActionService }
+      ]
     }).compileComponents();
 
     fixture = TestBed.createComponent(BoardFieldComponent);
@@ -42,16 +55,21 @@ describe('BoardFieldComponent', () => {
 
   it('should display absolute value', () => {
     component.field.value = -5;
+    component.ngOnInit();
     fixture.detectChanges();
     expect(component.absVal).toBe(5);
     expect(component.negative).toBeTrue();
   });
 
-  it('should handle field selection', () => {
+  it('should handle field selection', async () => {
+    const mockComputerMove = spyOn(TestBed.inject(ComputerService), 'computerMove').and.returnValue(Promise.resolve());
     const tdElement = fixture.nativeElement.querySelector('td');
+    
     tdElement.click();
     fixture.detectChanges();
-
+    await fixture.whenStable();
+    
+    expect(mockComputerMove).toHaveBeenCalled();
     expect(component.field.taken).toBeTrue();
     expect(component.field.active).toBeFalse();
     expect(component.field.points).toBe(5);
@@ -61,10 +79,12 @@ describe('BoardFieldComponent', () => {
     const tdElement = fixture.nativeElement.querySelector('td');
     
     component.field.value = 5;
+    component.ngOnInit();
     fixture.detectChanges();
     expect(tdElement.classList.contains('green')).toBeTrue();
     
     component.field.value = -5;
+    component.ngOnInit();
     fixture.detectChanges();
     expect(tdElement.classList.contains('red')).toBeTrue();
     

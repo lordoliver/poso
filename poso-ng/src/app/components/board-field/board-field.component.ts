@@ -95,12 +95,12 @@ export class BoardFieldComponent implements OnInit, OnDestroy {
     this.subscription.unsubscribe();
   }
 
-  take(): void {
+  async take(): Promise<void> {
     if (this.field.isSelectable()) {
       this.field.takeField();
       this.boardActionService.setMove(this.field.position);
       this.boardActionService.nextPlayer();
-      this.computerService.computerMove();
+      await this.computerService.computerMove();
     }
   }
 }

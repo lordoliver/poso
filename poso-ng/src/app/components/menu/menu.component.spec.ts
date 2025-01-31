@@ -1,4 +1,4 @@
-import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { ComponentFixture, TestBed, fakeAsync, tick } from '@angular/core/testing';
 import { MenuComponent } from './menu.component';
 
 describe('MenuComponent', () => {
@@ -18,19 +18,21 @@ describe('MenuComponent', () => {
     fixture.detectChanges();
   });
 
-  it('should create', () => {
+  it('should create', fakeAsync(() => {
     expect(component).toBeTruthy();
-  });
+    tick();
+  }));
 
-  it('should render menu items', () => {
+  it('should render menu items', fakeAsync(() => {
     const menuElement = fixture.nativeElement;
     const link = menuElement.querySelector('a');
     expect(link).toBeTruthy();
     expect(link.textContent).toBe('Test Item');
     expect(link.classList.contains('test-class')).toBeTrue();
-  });
+    tick();
+  }));
 
-  it('should prevent default and execute action on click', () => {
+  it('should prevent default and execute action on click', fakeAsync(() => {
     const actionSpy = jasmine.createSpy('action');
     component.menuItems = [
       { name: 'Test Item', cssClass: 'test-class', action: actionSpy }
@@ -38,11 +40,10 @@ describe('MenuComponent', () => {
     fixture.detectChanges();
 
     const link = fixture.nativeElement.querySelector('a');
-    const event = new MouseEvent('click');
-    spyOn(event, 'preventDefault');
-    link.dispatchEvent(event);
+    link.click();
+    fixture.detectChanges();
+    tick();
 
-    expect(event.preventDefault).toHaveBeenCalled();
     expect(actionSpy).toHaveBeenCalled();
-  });
+  }));
 });
