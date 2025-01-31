@@ -38,31 +38,25 @@ import { Subscription } from 'rxjs';
     }
     td.red { 
       background: 
-        linear-gradient(180deg, transparent 50%, rgba(91,0,0,0.4) 50%),
-        linear-gradient(90deg, rgba(184,90,90,1) 0%, rgba(165,45,45,1) 100%);
+        linear-gradient(180deg, rgba(184,90,90,1) 0%, rgba(165,45,45,1) 100%);
       border: 0.2em solid #661915;
       color: #fff;
       font-weight: bold;
+      box-shadow: inset 0 2px 4px rgba(255,255,255,0.3), inset 0 -2px 4px rgba(0,0,0,0.4);
     }
     td.green { 
       background:
-        linear-gradient(180deg, transparent 50%, rgba(50,50,0,0.25) 50%),
-        linear-gradient(90deg, rgba(145,179,91,1) 0%, rgba(112,154,45,1) 100%);
+        linear-gradient(180deg, rgba(145,179,91,1) 0%, rgba(112,154,45,1) 100%);
       border: 0.2em solid #45591a;
       color: #fff;
       font-weight: bold;
+      box-shadow: inset 0 2px 4px rgba(255,255,255,0.3), inset 0 -2px 4px rgba(0,0,0,0.4);
     }
     td.disabled { 
       cursor: not-allowed;
-    }
-    td.disabled:after {
-      content: '';
-      position: absolute;
-      background: linear-gradient(45deg, rgba(0,0,0,0.5) 0%, rgba(0,0,0,0.5) 100%);
-      left: 0;
-      top: 0;
-      bottom: 0;
-      right: 0;
+      opacity: 0.7;
+      background: linear-gradient(45deg, rgba(0,0,0,0.2) 25%, transparent 25%, transparent 50%, rgba(0,0,0,0.2) 50%, rgba(0,0,0,0.2) 75%, transparent 75%, transparent);
+      background-size: 4px 4px;
     }
     b {
       display: block;
@@ -104,7 +98,9 @@ export class BoardFieldComponent implements OnInit, OnDestroy {
       this.boardActionService.updatePoints(this.field.value);
       this.boardActionService.setMove(this.field.position);
       this.boardActionService.nextPlayer();
-      await this.computerService.computerMove();
+      if (this.computerService.isComputerTurn()) {
+        await this.computerService.computerMove();
+      }
     }
   }
 }

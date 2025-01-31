@@ -13,8 +13,9 @@ describe('BoardComponent', () => {
   let boardActionService: BoardActionService;
 
   beforeEach(fakeAsync(() => {
-    computerService = jasmine.createSpyObj('ComputerService', ['computerMove']);
+    computerService = jasmine.createSpyObj('ComputerService', ['computerMove', 'isComputerTurn']);
     computerService.computerMove.and.returnValue(Promise.resolve());
+    computerService.isComputerTurn.and.returnValue(false);
 
     TestBed.configureTestingModule({
       imports: [BoardComponent, BoardFieldComponent],
