@@ -95,7 +95,8 @@ export class BoardFieldComponent implements OnInit, OnDestroy {
     this.subscription.unsubscribe();
   }
 
-  async take(): Promise<void> {
+  async take(event?: MouseEvent): Promise<void> {
+    event?.preventDefault();
     if (this.field.isSelectable()) {
       this.field.takeField();
       this.boardActionService.setMove(this.field.position);

@@ -1,5 +1,6 @@
 import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { Router } from '@angular/router';
 import {
   BoardComponent,
   RankingComponent,
@@ -22,16 +23,22 @@ export class AppComponent {
     { name: 'Player 1', points: 0 },
     { name: 'Computer', points: 0 }
   ];
-  menuItems = [
+  menuItems: { name: string; cssClass: string; action: () => void; }[];
+
+  constructor(private router: Router) {
+    this.menuItems = [
     { 
       name: 'New Game',
       cssClass: 'new-game',
-      action: () => window.location.reload()
+      action: () => {
+        this.router.navigate(['/'], { onSameUrlNavigation: 'reload' });
+      }
     },
     {
       name: 'Rules',
       cssClass: 'rules',
       action: () => console.log('Show rules')
     }
-  ];
+    ];
+  }
 }
