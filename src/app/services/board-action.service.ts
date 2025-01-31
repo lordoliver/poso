@@ -16,7 +16,7 @@ export class BoardActionService {
   private currentPosition: Position | null = null;
   private enabled = { x: null as number | null, y: null as number | null };
 
-  private changeDirection(position: Position): void {
+  changeDirection(position: Position): void {
     if (this.enabled.x === null && this.enabled.y === null) {
       this.enabled = { x: position.x, y: position.y };
     } else if (this.enabled.x === null && this.enabled.y !== null) {
@@ -31,15 +31,11 @@ export class BoardActionService {
       }
     }
     this.currentPosition = position;
+    this.updateGameState();
   }
 
   nextPlayer(): void {
     this.playerService.nextPlayer();
-  }
-
-  setMove(position: Position): void {
-    this.changeDirection(position);
-    this.updateGameState();
   }
 
   reset(): void {

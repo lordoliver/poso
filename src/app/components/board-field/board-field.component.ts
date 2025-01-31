@@ -116,7 +116,7 @@ export class BoardFieldComponent implements OnInit, OnDestroy {
       this.field.takeField();
       this.field.active = false;
       this.boardActionService.updatePoints(this.field.value);
-      this.boardActionService.setMove(this.field.position);
+      this.boardActionService.changeDirection(this.field.position);
       this.boardActionService.nextPlayer();
       if (this.computerService.isComputerTurn()) {
         await this.computerService.computerMove();
