@@ -19,17 +19,7 @@ export class BoardActionService {
   changeDirection(position: Position): void {
     if (this.enabled.x === null && this.enabled.y === null) {
       this.enabled = { x: position.x, y: position.y };
-      this.currentPosition = position;
-      this.updateGameState();
-      return;
-    }
-
-     if (!this.isEnabled(position)) {
-      alert('error! you should not come here!');
-      return;
-    }
-
-    if (this.enabled.x === null && this.enabled.y !== null) {
+    } else if (this.enabled.x === null && this.enabled.y !== null) {
       this.enabled = { x: position.x, y: null };
     } else if (this.enabled.x !== null && this.enabled.y === null) {
       this.enabled = { x: null, y: position.y };
@@ -37,7 +27,7 @@ export class BoardActionService {
       this.enabled = { x: null, y: position.y };
     } else if (this.currentPosition?.y === position.y) {
       this.enabled = { x: position.x, y: null };
-     } else {
+    } else {
       alert('error! you should not come here!');
       return;
     }
