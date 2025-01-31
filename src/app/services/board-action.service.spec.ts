@@ -1,14 +1,17 @@
 import { TestBed } from '@angular/core/testing';
 import { BoardActionService } from './board-action.service';
+import { PlayerService } from './player.service';
 
 describe('BoardActionService', () => {
   let service: BoardActionService;
+  let playerService: PlayerService;
 
   beforeEach(() => {
     TestBed.configureTestingModule({
-      providers: [BoardActionService]
+      providers: [BoardActionService, PlayerService]
     });
     service = TestBed.inject(BoardActionService);
+    playerService = TestBed.inject(PlayerService);
   });
 
   it('should allow first move anywhere', () => {
@@ -17,14 +20,11 @@ describe('BoardActionService', () => {
   });
 
   it('should switch players correctly', () => {
-    let currentPlayer: number | undefined;
-    service.currentPlayer$.subscribe(player => currentPlayer = player);
-    
-    const initialPlayer = currentPlayer;
+    const initialPlayer = playerService.getCurrentPlayer();
     service.nextPlayer();
-    expect(currentPlayer).not.toBe(initialPlayer);
+    expect(playerService.getCurrentPlayer()).not.toBe(initialPlayer);
     service.nextPlayer();
-    expect(currentPlayer).toBe(initialPlayer);
+    expect(playerService.getCurrentPlayer()).toBe(initialPlayer);
   });
 
   it('should restrict moves after first selection', () => {
@@ -38,5 +38,11 @@ describe('BoardActionService', () => {
     service.setMove({ x: 3, y: 3 });
     service.reset();
     expect(service.isEnabled({ x: 0, y: 0 })).toBeTrue();
+  });
+
+  it('should update points correctly', () => {
+    const initialPoints = playerService.getCurrentPlayer().points;
+    service.updatePoints(5);
+    expect(playerService.getCurrentPlayer().points).toBe(initialPoints + 5);
   });
 });

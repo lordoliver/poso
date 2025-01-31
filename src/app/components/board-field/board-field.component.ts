@@ -76,21 +76,7 @@ export class BoardFieldComponent implements OnInit, OnDestroy {
   ngOnInit(): void {
     this.absVal = Math.abs(this.field.value);
     this.negative = this.field.value < 0;
-    
-    this.subscription.add(
-      this.boardActionService.currentPlayer$.subscribe(() => {
-        this.field.active = this.boardActionService.isEnabled(this.field.position);
-      })
-    );
-
-    this.subscription.add(
-      this.boardActionService.currentPlayer$.subscribe(() => {
-        if (this.field.taken) {
-          this.absVal = Math.abs(this.field.points);
-          this.negative = this.field.points < 0;
-        }
-      })
-    );
+    this.field.active = this.boardActionService.isEnabled(this.field.position);
   }
 
   ngOnDestroy(): void {

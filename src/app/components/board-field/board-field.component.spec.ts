@@ -2,7 +2,6 @@ import { ComponentFixture, TestBed, fakeAsync, tick } from '@angular/core/testin
 import { BoardFieldComponent } from './board-field.component';
 import { ComputerService, BoardActionService } from '../../services';
 import { Field } from '../../interfaces/field.interface';
-import { BehaviorSubject } from 'rxjs';
 
 describe('BoardFieldComponent', () => {
   let component: BoardFieldComponent;
@@ -14,8 +13,7 @@ describe('BoardFieldComponent', () => {
       isEnabled: () => true,
       setMove: () => {},
       nextPlayer: () => {},
-      updatePoints: () => {},
-      currentPlayer$: new BehaviorSubject(1)
+      updatePoints: () => {}
     };
     const mockComputerService = {
       computerMove: () => Promise.resolve()

@@ -1,22 +1,16 @@
 import { Injectable } from '@angular/core';
 import { Position, Field } from '../interfaces/field.interface';
 import { BehaviorSubject } from 'rxjs';
+import { PlayerService } from './player.service';
 
 @Injectable({
   providedIn: 'root'
 })
 export class BoardActionService {
-  private currentPlayer = new BehaviorSubject<number>(Math.random() < 0.5 ? 1 : 2);
-  currentPlayer$ = this.currentPlayer.asObservable();
-  
-  private player1Points = new BehaviorSubject<number>(0);
-  player1Points$ = this.player1Points.asObservable();
-  
-  private player2Points = new BehaviorSubject<number>(0);
-  player2Points$ = this.player2Points.asObservable();
-  
   private gameOver = new BehaviorSubject<boolean>(false);
   gameOver$ = this.gameOver.asObservable();
+
+  constructor(private playerService: PlayerService) {}
   
   private fields: Field[][] = [];
   private lastPosition: Position | null = null;
@@ -44,8 +38,7 @@ export class BoardActionService {
   }
 
   nextPlayer(): void {
-    const next = this.currentPlayer.value === 1 ? 2 : 1;
-    this.currentPlayer.next(next);
+    this.playerService.nextPlayer();
   }
 
   setMove(position: Position): void {
@@ -57,20 +50,13 @@ export class BoardActionService {
     this.lastPosition = null;
     this.playerDirection = { 1: null, 2: null };
     this.enabled = { x: null, y: null };
-    this.currentPlayer.next(Math.random() < 0.5 ? 1 : 2);
     this.gameOver.next(false);
     this.fields = [];
-    this.player1Points.next(0);
-    this.player2Points.next(0);
+    this.playerService.reset();
   }
 
   updatePoints(value: number): void {
-    const currentPlayer = this.currentPlayer.value;
-    if (currentPlayer === 1) {
-      this.player1Points.next(this.player1Points.value + value);
-    } else {
-      this.player2Points.next(this.player2Points.value + value);
-    }
+    this.playerService.getCurrentPlayer().addValue(value);
   }
 
   setFields(fields: Field[][]): void {

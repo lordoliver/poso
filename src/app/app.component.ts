@@ -7,7 +7,7 @@ import {
   MenuComponent,
   PlayerComponent
 } from './components';
-import { GameStateService, BoardActionService } from './services';
+import { GameStateService, PlayerService } from './services';
 
 @Component({
   selector: 'app-root',
@@ -40,13 +40,11 @@ export class AppComponent {
 
   constructor(
     private gameStateService: GameStateService,
-    private boardActionService: BoardActionService
+    private playerService: PlayerService
   ) {
-    this.boardActionService.player1Points$.subscribe((points: number) => {
-      this.players[0].points = points;
-    });
-    this.boardActionService.player2Points$.subscribe((points: number) => {
-      this.players[1].points = points;
-    });
+    this.players = [
+      this.playerService.player1,
+      this.playerService.player2
+    ];
   }
 }
