@@ -27,33 +27,47 @@ import { Subscription } from 'rxjs';
       height: 60px;
       text-align: center;
       cursor: pointer;
-      border: 1px solid #ccc;
       padding: 10px;
       font-size: 1.2rem;
       transition: all 0.2s ease;
       user-select: none;
+      position: relative;
     }
     td:hover:not(.disabled) {
-      background-color: rgba(0, 0, 0, 0.05);
       transform: scale(1.05);
     }
     td.red { 
-      background-color: #ffebee;
-      color: #d32f2f;
+      background: 
+        linear-gradient(180deg, transparent 50%, rgba(91,0,0,0.4) 50%),
+        linear-gradient(90deg, rgba(184,90,90,1) 0%, rgba(165,45,45,1) 100%);
+      border: 0.2em solid #661915;
+      color: #fff;
       font-weight: bold;
     }
     td.green { 
-      background-color: #e8f5e9;
-      color: #388e3c;
+      background:
+        linear-gradient(180deg, transparent 50%, rgba(50,50,0,0.25) 50%),
+        linear-gradient(90deg, rgba(145,179,91,1) 0%, rgba(112,154,45,1) 100%);
+      border: 0.2em solid #45591a;
+      color: #fff;
       font-weight: bold;
     }
     td.disabled { 
-      background-color: #f5f5f5;
       cursor: not-allowed;
-      opacity: 0.7;
+    }
+    td.disabled:after {
+      content: '';
+      position: absolute;
+      background: linear-gradient(45deg, rgba(0,0,0,0.5) 0%, rgba(0,0,0,0.5) 100%);
+      left: 0;
+      top: 0;
+      bottom: 0;
+      right: 0;
     }
     b {
       display: block;
+      position: relative;
+      z-index: 1;
     }
     i {
       font-style: normal;
