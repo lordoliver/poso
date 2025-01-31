@@ -17,26 +17,29 @@ export class BoardActionService {
   private enabled = { x: null as number | null, y: null as number | null };
 
   changeDirection(position: Position): void {
-    if (!this.isEnabled(position)) {
-      console.error('Invalid move - must follow game rules');
+    if (this.enabled.x === null && this.enabled.y === null) {
+      this.enabled = { x: position.x, y: position.y };
+      this.currentPosition = position;
+      this.updateGameState();
       return;
     }
 
-    if (this.enabled.x === null && this.enabled.y === null) {
-      this.enabled = { x: position.x, y: position.y };
-    } else if (this.enabled.x === null && this.enabled.y !== null) {
+     if (!this.isEnabled(position)) {
+      alert('error! you should not come here!');
+      return;
+    }
+
+    if (this.enabled.x === null && this.enabled.y !== null) {
       this.enabled = { x: position.x, y: null };
     } else if (this.enabled.x !== null && this.enabled.y === null) {
       this.enabled = { x: null, y: position.y };
-    } else {
-      if (this.currentPosition?.x === position.x) {
-        this.enabled = { x: null, y: position.y };
-      } else if (this.currentPosition?.y === position.y) {
-        this.enabled = { x: position.x, y: null };
-      } else {
-        console.error('error! you should not come here!');
-        return;
-      }
+    } else if (this.currentPosition?.x === position.x) {
+      this.enabled = { x: null, y: position.y };
+    } else if (this.currentPosition?.y === position.y) {
+      this.enabled = { x: position.x, y: null };
+     } else {
+      alert('error! you should not come here!');
+      return;
     }
     
     this.currentPosition = position;
@@ -80,15 +83,8 @@ export class BoardActionService {
 
   isEnabled(position: Position): boolean {
     if (!this.canMove()) return false;
-    
-    if (this.enabled.x === null && this.enabled.y === null) {
-      return true;
-    }
-    
-    if (this.currentPosition) {
-      return position.x === this.enabled.x || position.y === this.enabled.y;
-    }
-    
-    return position.x === this.enabled.x && position.y === this.enabled.y;
+    return (this.enabled.x === null && this.enabled.y === null) ||
+      position.x === this.enabled.x || 
+      position.y === this.enabled.y;
   }
 }
