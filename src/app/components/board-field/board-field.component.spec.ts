@@ -16,7 +16,8 @@ describe('BoardFieldComponent', () => {
       updatePoints: () => {}
     };
     const mockComputerService = {
-      computerMove: () => Promise.resolve()
+      computerMove: () => Promise.resolve(),
+      isComputerTurn: () => false
     };
 
     await TestBed.configureTestingModule({
@@ -61,7 +62,9 @@ describe('BoardFieldComponent', () => {
   });
 
   it('should handle field selection', fakeAsync(() => {
-    const mockComputerMove = spyOn(TestBed.inject(ComputerService), 'computerMove').and.returnValue(Promise.resolve());
+    const computerService = TestBed.inject(ComputerService);
+    const mockComputerMove = spyOn(computerService, 'computerMove').and.returnValue(Promise.resolve());
+    spyOn(computerService, 'isComputerTurn').and.returnValue(true);
     const tdElement = fixture.nativeElement.querySelector('td');
     
     tdElement.click();
