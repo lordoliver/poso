@@ -1,6 +1,6 @@
 {
   "name": "poso",
-  "type": "module",
+  "type": "commonjs",
   "version": "0.0.0",
   "scripts": {
     "ng": "ng",

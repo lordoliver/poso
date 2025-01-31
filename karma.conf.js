@@ -1,13 +1,13 @@
-export default function (config) {
+module.exports = function (config) {
   config.set({
     basePath: '',
     frameworks: ['jasmine', '@angular-devkit/build-angular'],
     plugins: [
-      'karma-jasmine',
-      'karma-chrome-launcher',
-      'karma-jasmine-html-reporter',
-      'karma-coverage',
-      '@angular-devkit/build-angular/plugins/karma'
+      require('karma-jasmine'),
+      require('karma-chrome-launcher'),
+      require('karma-jasmine-html-reporter'),
+      require('karma-coverage'),
+      require('@angular-devkit/build-angular/plugins/karma')
     ],
     client: {
       clearContext: false,
@@ -30,7 +30,13 @@ export default function (config) {
     colors: true,
     logLevel: config.LOG_INFO,
     autoWatch: true,
-    browsers: ['ChromeHeadless'],
+    browsers: ['Chrome'],
+    customLaunchers: {
+      Chrome: {
+        base: 'ChromeHeadless',
+        flags: ['--no-sandbox', '--disable-gpu']
+      }
+    },
     singleRun: true,
     restartOnFileChange: false,
     browserDisconnectTimeout: 10000,
