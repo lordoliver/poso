@@ -31,7 +31,7 @@ export class AppComponent {
       name: 'New Game',
       cssClass: 'new-game',
       action: () => {
-        this.gameStateService.resetGame();
+        this.gameStateService.reset();
       }
     },
     {

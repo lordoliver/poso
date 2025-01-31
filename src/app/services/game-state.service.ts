@@ -7,7 +7,7 @@ import { BoardActionService } from './board-action.service';
 export class GameStateService {
   constructor(private boardActionService: BoardActionService) {}
 
-  resetGame(): void {
+  reset(): void {
     this.boardActionService.reset();
   }
 }

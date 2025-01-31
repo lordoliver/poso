@@ -9,7 +9,7 @@ describe('AppComponent', () => {
   let gameStateService: jasmine.SpyObj<GameStateService>;
 
   beforeEach(fakeAsync(() => {
-    gameStateService = jasmine.createSpyObj('GameStateService', ['resetGame']);
+    gameStateService = jasmine.createSpyObj('GameStateService', ['reset']);
 
     TestBed.configureTestingModule({
       imports: [
@@ -43,6 +43,6 @@ describe('AppComponent', () => {
     newGameItem?.action();
     tick();
 
-    expect(gameStateService.resetGame).toHaveBeenCalled();
+    expect(gameStateService.reset).toHaveBeenCalled();
   }));
 });

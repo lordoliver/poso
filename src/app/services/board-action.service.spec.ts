@@ -36,7 +36,7 @@ describe('BoardActionService', () => {
 
   it('should reset game state correctly', () => {
     service.setMove({ x: 3, y: 3 });
-    service.resetGame();
+    service.reset();
     expect(service.isEnabled({ x: 0, y: 0 })).toBeTrue();
   });
 });
