@@ -11,7 +11,7 @@ interface MenuItem {
   selector: 'app-menu',
   standalone: true,
   imports: [CommonModule],
-  template: `<a *ngFor="let menuItem of menuItems" href="" class="{{menuItem.cssClass}}" [innerHTML]="menuItem.name" (click)="$event.preventDefault(); menuItem.action()"></a>`,
+  template: `<a *ngFor="let menuItem of menuItems" href="" class="{{menuItem.cssClass}}" [innerHTML]="menuItem.name" (click)="$event.preventDefault(); menuItem.action(this)"></a>`,
   styles: [`
     :host {
       display: block;
