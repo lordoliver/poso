@@ -28,6 +28,9 @@ export class BoardActionService {
         this.enabled = { x: null, y: position.y };
       } else if (this.currentPosition?.y === position.y) {
         this.enabled = { x: position.x, y: null };
+      } else {
+        console.error('Invalid cross move - must share row or column with previous move');
+        return;
       }
     }
     this.currentPosition = position;
@@ -70,10 +73,14 @@ export class BoardActionService {
   }
 
   isEnabled(position: Position): boolean {
-    return this.canMove() && (
-      (this.enabled.x === null && this.enabled.y === null) ||
-      position.x === this.enabled.x ||
-      position.y === this.enabled.y
-    );
+    if (!this.canMove()) return false;
+    
+    // First move: only exact position is enabled
+    if (this.enabled.x === null && this.enabled.y === null) {
+      return true;
+    }
+    
+    // After first move: must match enabled x or y coordinate
+    return position.x === this.enabled.x || position.y === this.enabled.y;
   }
 }

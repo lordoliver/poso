@@ -27,19 +27,28 @@ describe('BoardActionService', () => {
     expect(playerService.getCurrentPlayer()).toBe(initialPlayer);
   });
 
-  it('should restrict moves after first selection', () => {
+  it('should restrict moves to exact position on first selection', () => {
     service.changeDirection({ x: 3, y: 3 });
-    // After first move, both row and column should be enabled
-    expect(service.isEnabled({ x: 3, y: 4 })).toBeTrue(); // Same row
-    expect(service.isEnabled({ x: 4, y: 3 })).toBeTrue(); // Same column
-    expect(service.isEnabled({ x: 0, y: 0 })).toBeFalse(); // Different row and column
+    // First move should only enable the exact position
+    expect(service.isEnabled({ x: 3, y: 3 })).toBeTrue(); // Same position
+    expect(service.isEnabled({ x: 3, y: 4 })).toBeFalse(); // Same row
+    expect(service.isEnabled({ x: 4, y: 3 })).toBeFalse(); // Same column
+    expect(service.isEnabled({ x: 0, y: 0 })).toBeFalse(); // Different position
   });
 
   it('should handle direction changes correctly', () => {
-    // First move enables both row and column
+    // First move enables only exact position
     service.changeDirection({ x: 3, y: 3 });
-    expect(service.isEnabled({ x: 3, y: 4 })).toBeTrue();
-    expect(service.isEnabled({ x: 4, y: 3 })).toBeTrue();
+    expect(service.isEnabled({ x: 3, y: 3 })).toBeTrue();
+    expect(service.isEnabled({ x: 3, y: 4 })).toBeFalse();
+    expect(service.isEnabled({ x: 4, y: 3 })).toBeFalse();
+
+    // Invalid cross move should not update position
+    const spyConsole = jest.spyOn(console, 'error');
+    service.changeDirection({ x: 5, y: 5 }); // Neither same row nor column
+    expect(spyConsole).toHaveBeenCalledWith('Invalid cross move - must share row or column with previous move');
+    expect(service.isEnabled({ x: 3, y: 3 })).toBeTrue(); // Position should not have changed
+    spyConsole.mockRestore();
 
     // Moving in same row switches to column-only
     service.changeDirection({ x: 3, y: 4 });
