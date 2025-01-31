@@ -13,7 +13,6 @@ module.exports = function (config) {
       clearContext: false,
       jasmine: {
         random: false,
-        failFast: false,
         timeoutInterval: 10000
       }
     },
@@ -29,19 +28,10 @@ module.exports = function (config) {
     port: 9876,
     colors: true,
     logLevel: config.LOG_INFO,
-    autoWatch: true,
-    browsers: ['Chrome'],
-    customLaunchers: {
-      Chrome: {
-        base: 'ChromeHeadless',
-        flags: ['--no-sandbox', '--disable-gpu']
-      }
-    },
+    autoWatch: false,
+    browsers: ['ChromeHeadless'],
     singleRun: true,
-    restartOnFileChange: false,
-    browserDisconnectTimeout: 10000,
-    browserDisconnectTolerance: 3,
-    browserNoActivityTimeout: 60000,
-    captureTimeout: 60000
+    browserNoActivityTimeout: 30000,
+    browserDisconnectTolerance: 1
   });
 };
