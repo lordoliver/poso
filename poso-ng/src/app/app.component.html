@@ -1,0 +1,16 @@
+<div class="container">
+  <h1>POSO - Thinking Game</h1>
+  <div class="game-layout">
+    <aside class="left-sidebar">
+      <app-player [player]="currentPlayer"></app-player>
+      <app-ranking [players]="players"></app-ranking>
+    </aside>
+    <main class="main-content">
+      <app-board></app-board>
+    </main>
+    <aside class="right-sidebar">
+      <app-menu [menuItems]="menuItems"></app-menu>
+      <app-rules></app-rules>
+    </aside>
+  </div>
+</div>
