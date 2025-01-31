@@ -1,6 +1,5 @@
 import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { Router } from '@angular/router';
 import {
   BoardComponent,
   RankingComponent,
@@ -8,6 +7,7 @@ import {
   MenuComponent,
   PlayerComponent
 } from './components';
+import { GameStateService } from './services/game-state.service';
 
 @Component({
   selector: 'app-root',
@@ -25,13 +25,13 @@ export class AppComponent {
   ];
   menuItems: { name: string; cssClass: string; action: () => void; }[];
 
-  constructor(private router: Router) {
+  constructor(private gameStateService: GameStateService) {
     this.menuItems = [
     { 
       name: 'New Game',
       cssClass: 'new-game',
       action: () => {
-        this.router.navigate(['/'], { onSameUrlNavigation: 'reload' });
+        this.gameStateService.resetGame();
       }
     },
     {

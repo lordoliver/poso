@@ -1,14 +1,16 @@
 import { ComponentFixture, TestBed, fakeAsync, tick } from '@angular/core/testing';
-import { Router } from '@angular/router';
 import { AppComponent } from './app.component';
 import { BoardComponent, RankingComponent, RulesComponent, MenuComponent, PlayerComponent } from './components';
+import { GameStateService } from './services/game-state.service';
 
 describe('AppComponent', () => {
   let component: AppComponent;
   let fixture: ComponentFixture<AppComponent>;
-  let router: Router;
+  let gameStateService: jasmine.SpyObj<GameStateService>;
 
   beforeEach(fakeAsync(() => {
+    gameStateService = jasmine.createSpyObj('GameStateService', ['resetGame']);
+
     TestBed.configureTestingModule({
       imports: [
         AppComponent,
@@ -19,24 +21,15 @@ describe('AppComponent', () => {
         PlayerComponent
       ],
       providers: [
-        {
-          provide: Router,
-          useValue: { navigate: jasmine.createSpy('navigate') }
-        }
+        { provide: GameStateService, useValue: gameStateService }
       ]
     }).compileComponents();
-
-    router = TestBed.inject(Router);
 
     fixture = TestBed.createComponent(AppComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
     tick();
   }));
-
-  afterEach(() => {
-    (router.navigate as jasmine.Spy).calls.reset();
-  });
 
   it('should create', () => {
     expect(component).toBeTruthy();
@@ -50,6 +43,6 @@ describe('AppComponent', () => {
     newGameItem?.action();
     tick();
 
-    expect(router.navigate).toHaveBeenCalledWith(['/'], { onSameUrlNavigation: 'reload' });
+    expect(gameStateService.resetGame).toHaveBeenCalled();
   }));
 });

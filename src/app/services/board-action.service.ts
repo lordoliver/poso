@@ -59,7 +59,7 @@ export class BoardActionService {
     }
   }
 
-  resetGame(): void {
+  reset(): void {
     this.firstMove = true;
     this.secondMove = false;
     this.lastPosition = null;
@@ -67,6 +67,7 @@ export class BoardActionService {
     this.enabled = { x: null, y: null };
     this.currentPlayer.next(Math.random() < 0.5 ? 1 : 2);
     this.gameOver.next(false);
+    this.fields = [];
   }
 
   setFields(fields: Field[][]): void {

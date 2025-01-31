@@ -12,7 +12,7 @@ import { Subscription } from 'rxjs';
 	'red': negative && !field.taken,
 	'green': !negative && !field.taken, 
 	'disabled': !field.active
-	}" (click)="take()">
+	}" (click)="take($event)">
 	<b>
 		<i>{{absVal}}</i>
 	</b>
