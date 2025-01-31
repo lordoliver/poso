@@ -1,50 +1,59 @@
-# POSO - Thinking Game
+# PosoNg
 
-POSO is a strategic thinking board game where players take turns selecting numbers on a game board, following specific movement rules to maximize their score.
+This project was generated using [Angular CLI](https://github.com/angular/angular-cli) version 19.1.5.
 
-## Live Demo
-You can play the game online at: https://lordoliver.github.io/poso/
+## Development server
 
-## Versions
+To start a local development server, run:
 
-### Angular (Latest)
-The game has been migrated to Angular 19.1.x, featuring:
-- Modern component-based architecture
-- Improved type safety with TypeScript
-- Comprehensive unit test coverage
-- Responsive design with Tailwind CSS
-
-### AngularJS (Legacy)
-The original version was built with AngularJS 1.3.14 and can be found in the `app` directory.
-
-## Development
-
-### Prerequisites
-- Node.js 20.x or later
-- npm 10.x or later
-
-### Setup
 ```bash
-# For the new Angular version
-cd poso-ng
-npm install
-npm start
-
-# For the legacy AngularJS version
-cd app
-npm install
-npm start
+ng serve
 ```
 
-### Testing
+Once the server is running, open your browser and navigate to `http://localhost:4200/`. The application will automatically reload whenever you modify any of the source files.
+
+## Code scaffolding
+
+Angular CLI includes powerful code scaffolding tools. To generate a new component, run:
+
 ```bash
-cd poso-ng
-npm test
+ng generate component component-name
 ```
 
-## Game Rules
-1. Players take turns selecting numbers on the board
-2. Movement is restricted to horizontal or vertical directions
-3. Players accumulate points based on the numbers they select
-4. The game ends when no valid moves remain
-5. The player with the highest score wins
+For a complete list of available schematics (such as `components`, `directives`, or `pipes`), run:
+
+```bash
+ng generate --help
+```
+
+## Building
+
+To build the project run:
+
+```bash
+ng build
+```
+
+This will compile your project and store the build artifacts in the `dist/` directory. By default, the production build optimizes your application for performance and speed.
+
+## Running unit tests
+
+To execute unit tests with the [Karma](https://karma-runner.github.io) test runner, use the following command:
+
+```bash
+ng test
+```
+
+## Running end-to-end tests
+
+For end-to-end (e2e) testing, run:
+
+```bash
+ng e2e
+```
+
+Angular CLI does not come with an end-to-end testing framework by default. You can choose one that suits your needs.
+
+## Additional Resources
+
+For more information on using the Angular CLI, including detailed command references, visit the [Angular CLI Overview and Command Reference](https://angular.dev/tools/cli) page.

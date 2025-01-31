@@ -15,18 +15,16 @@ jobs:
         with:
           node-version: '20'
           cache: 'npm'
-          cache-dependency-path: poso-ng/package-lock.json
+          cache-dependency-path: package-lock.json
       
       - name: Install dependencies
-        working-directory: poso-ng
         run: npm ci
       
       - name: Build
-        working-directory: poso-ng
         run: npm run build -- --base-href=/poso/
       
       - name: Deploy
         uses: peaceiris/actions-gh-pages@v3
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
-          publish_dir: poso-ng/dist/poso-ng/browser
+          publish_dir: dist/poso-ng/browser
