@@ -41,7 +41,7 @@ export class ComputerService {
 
     if (highest) {
       highest.takeField();
-      this.boardActionService.setMove(highest.position);
+      this.boardActionService.changeDirection(highest.position);
       this.boardActionService.nextPlayer();
     }
   }
