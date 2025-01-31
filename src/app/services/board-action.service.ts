@@ -17,22 +17,19 @@ export class BoardActionService {
   private enabled = { x: null as number | null, y: null as number | null };
 
   changeDirection(position: Position): void {
+    if (!this.isEnabled(position)) {
+      console.error('Invalid move - must follow game rules');
+      return;
+    }
+
     if (this.enabled.x === null && this.enabled.y === null) {
       this.enabled = { x: position.x, y: position.y };
-    } else if (this.enabled.x === null && this.enabled.y !== null) {
-      this.enabled = { x: position.x, y: null };
-    } else if (this.enabled.x !== null && this.enabled.y === null) {
+    } else if (this.currentPosition?.x === position.x) {
       this.enabled = { x: null, y: position.y };
-    } else if (this.enabled.x !== null && this.enabled.y !== null) {
-      if (this.currentPosition?.x === position.x) {
-        this.enabled = { x: null, y: position.y };
-      } else if (this.currentPosition?.y === position.y) {
-        this.enabled = { x: position.x, y: null };
-      } else {
-        console.error('Invalid cross move - must share row or column with previous move');
-        return;
-      }
+    } else if (this.currentPosition?.y === position.y) {
+      this.enabled = { x: position.x, y: null };
     }
+    
     this.currentPosition = position;
     this.updateGameState();
   }
@@ -75,12 +72,14 @@ export class BoardActionService {
   isEnabled(position: Position): boolean {
     if (!this.canMove()) return false;
     
-    // First move: only exact position is enabled
     if (this.enabled.x === null && this.enabled.y === null) {
       return true;
     }
     
-    // After first move: must match enabled x or y coordinate
-    return position.x === this.enabled.x || position.y === this.enabled.y;
+    if (this.currentPosition) {
+      return position.x === this.enabled.x || position.y === this.enabled.y;
+    }
+    
+    return position.x === this.enabled.x && position.y === this.enabled.y;
   }
 }

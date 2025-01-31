@@ -29,36 +29,35 @@ describe('BoardActionService', () => {
 
   it('should restrict moves to exact position on first selection', () => {
     service.changeDirection({ x: 3, y: 3 });
-    // First move should only enable the exact position
-    expect(service.isEnabled({ x: 3, y: 3 })).toBeTrue(); // Same position
-    expect(service.isEnabled({ x: 3, y: 4 })).toBeFalse(); // Same row
-    expect(service.isEnabled({ x: 4, y: 3 })).toBeFalse(); // Same column
-    expect(service.isEnabled({ x: 0, y: 0 })).toBeFalse(); // Different position
-  });
-
-  it('should handle direction changes correctly', () => {
-    // First move enables only exact position
-    service.changeDirection({ x: 3, y: 3 });
     expect(service.isEnabled({ x: 3, y: 3 })).toBeTrue();
     expect(service.isEnabled({ x: 3, y: 4 })).toBeFalse();
     expect(service.isEnabled({ x: 4, y: 3 })).toBeFalse();
-
-    // Invalid cross move should not update position
-    const spyConsole = jest.spyOn(console, 'error');
-    service.changeDirection({ x: 5, y: 5 }); // Neither same row nor column
-    expect(spyConsole).toHaveBeenCalledWith('Invalid cross move - must share row or column with previous move');
-    expect(service.isEnabled({ x: 3, y: 3 })).toBeTrue(); // Position should not have changed
-    spyConsole.mockRestore();
-
-    // Moving in same row switches to column-only
-    service.changeDirection({ x: 3, y: 4 });
-    expect(service.isEnabled({ x: 3, y: 5 })).toBeFalse(); // Same row not allowed
-    expect(service.isEnabled({ x: 2, y: 4 })).toBeTrue();  // Same column allowed
+    expect(service.isEnabled({ x: 0, y: 0 })).toBeFalse();
     
-    // Moving in new column switches to row-only
+    const spyConsole = jest.spyOn(console, 'error');
+    service.changeDirection({ x: 4, y: 4 });
+    expect(spyConsole).toHaveBeenCalledWith('Invalid move - must follow game rules');
+    expect(service.isEnabled({ x: 3, y: 3 })).toBeTrue();
+    spyConsole.mockRestore();
+  });
+
+  it('should handle direction changes correctly', () => {
+    service.changeDirection({ x: 3, y: 3 });
+    expect(service.isEnabled({ x: 3, y: 3 })).toBeTrue();
+    
+    service.changeDirection({ x: 3, y: 4 });
+    expect(service.isEnabled({ x: 2, y: 4 })).toBeTrue();
+    expect(service.isEnabled({ x: 3, y: 5 })).toBeFalse();
+    
     service.changeDirection({ x: 2, y: 4 });
-    expect(service.isEnabled({ x: 2, y: 5 })).toBeTrue();  // Same row allowed
-    expect(service.isEnabled({ x: 1, y: 4 })).toBeFalse(); // Same column not allowed
+    expect(service.isEnabled({ x: 2, y: 5 })).toBeTrue();
+    expect(service.isEnabled({ x: 1, y: 4 })).toBeFalse();
+    
+    const spyConsole = jest.spyOn(console, 'error');
+    service.changeDirection({ x: 5, y: 5 });
+    expect(spyConsole).toHaveBeenCalledWith('Invalid move - must follow game rules');
+    expect(service.isEnabled({ x: 2, y: 5 })).toBeTrue();
+    spyConsole.mockRestore();
   });
 
   it('should reset game state correctly', () => {
