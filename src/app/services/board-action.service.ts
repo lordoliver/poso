@@ -24,10 +24,19 @@ export class BoardActionService {
 
     if (this.enabled.x === null && this.enabled.y === null) {
       this.enabled = { x: position.x, y: position.y };
-    } else if (this.currentPosition?.x === position.x) {
-      this.enabled = { x: null, y: position.y };
-    } else if (this.currentPosition?.y === position.y) {
+    } else if (this.enabled.x === null && this.enabled.y !== null) {
       this.enabled = { x: position.x, y: null };
+    } else if (this.enabled.x !== null && this.enabled.y === null) {
+      this.enabled = { x: null, y: position.y };
+    } else {
+      if (this.currentPosition?.x === position.x) {
+        this.enabled = { x: null, y: position.y };
+      } else if (this.currentPosition?.y === position.y) {
+        this.enabled = { x: position.x, y: null };
+      } else {
+        console.error('error! you should not come here!');
+        return;
+      }
     }
     
     this.currentPosition = position;
