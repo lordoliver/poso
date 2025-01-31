@@ -6,7 +6,7 @@
   },
   "newProjectRoot": "projects",
   "projects": {
-    "poso-ng": {
+    "poso": {
       "projectType": "application",
       "schematics": {},
       "root": "",
@@ -16,7 +16,7 @@
         "build": {
           "builder": "@angular-devkit/build-angular:application",
           "options": {
-            "outputPath": "dist/poso-ng",
+            "outputPath": "dist/poso",
             "index": "src/index.html",
             "browser": "src/main.ts",
             "polyfills": [
@@ -62,10 +62,10 @@
           "builder": "@angular-devkit/build-angular:dev-server",
           "configurations": {
             "production": {
-              "buildTarget": "poso-ng:build:production"
+              "buildTarget": "poso:build:production"
             },
             "development": {
-              "buildTarget": "poso-ng:build:development"
+              "buildTarget": "poso:build:development"
             }
           },
           "defaultConfiguration": "development"

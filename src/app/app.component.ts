@@ -1,5 +1,4 @@
 import { Component } from '@angular/core';
-import { RouterOutlet } from '@angular/router';
 import { CommonModule } from '@angular/common';
 import {
   BoardComponent,
@@ -12,7 +11,7 @@ import {
 @Component({
   selector: 'app-root',
   standalone: true,
-  imports: [CommonModule, RouterOutlet, BoardComponent, RankingComponent, RulesComponent, MenuComponent, PlayerComponent],
+  imports: [CommonModule, BoardComponent, RankingComponent, RulesComponent, MenuComponent, PlayerComponent],
   templateUrl: './app.component.html',
   styleUrl: './app.component.css'
 })

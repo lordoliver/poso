@@ -22,22 +22,29 @@ export class ComputerService {
     return selectable;
   }
 
+  private calculateFieldScore(field: Field): number {
+    const baseScore = Math.abs(field.value);
+    const positionScore = (field.position.x + field.position.y) / 14; // Normalize position score
+    return baseScore + positionScore;
+  }
+
   private move(): void {
     const selectable = this.getSelectable();
     if (selectable.length === 0) {
       return;
     }
 
-    let highest: Field | null = null;
-    for (const field of selectable) {
-      if (highest === null || field.value > highest.value) {
-        highest = field;
-      }
-    }
+    // Sort fields by score and get top 3
+    const sortedFields = selectable
+      .sort((a, b) => this.calculateFieldScore(b) - this.calculateFieldScore(a))
+      .slice(0, Math.min(3, selectable.length));
 
-    if (highest) {
-      highest.takeField();
-      this.boardActionService.setMove(highest.position);
+    // Randomly select from top fields
+    const selectedField = sortedFields[Math.floor(Math.random() * sortedFields.length)];
+    
+    if (selectedField) {
+      selectedField.takeField();
+      this.boardActionService.setMove(selectedField.position);
       this.boardActionService.nextPlayer();
     }
   }

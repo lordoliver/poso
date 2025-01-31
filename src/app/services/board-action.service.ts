@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { Position } from '../interfaces/field.interface';
+import { Position, Field } from '../interfaces/field.interface';
 import { BehaviorSubject } from 'rxjs';
 
 @Injectable({
@@ -9,6 +9,10 @@ export class BoardActionService {
   private currentPlayer = new BehaviorSubject<number>(Math.random() < 0.5 ? 1 : 2);
   currentPlayer$ = this.currentPlayer.asObservable();
   
+  private gameOver = new BehaviorSubject<boolean>(false);
+  gameOver$ = this.gameOver.asObservable();
+  
+  private fields: Field[][] = [];
   private firstMove = true;
   private secondMove = false;
   private lastPosition: Position | null = null;
@@ -17,16 +21,6 @@ export class BoardActionService {
     2: null
   };
   private enabled = { x: null as number | null, y: null as number | null };
-
-  isEnabled(position: Position): boolean {
-    if (this.firstMove) {
-      return true;
-    }
-
-    return this.enabled.x === null && this.enabled.y === null ||
-           position.x === this.enabled.x ||
-           position.y === this.enabled.y;
-  }
 
   private changeDirection(position: Position): void {
     if (this.enabled.x === null && this.enabled.y === null) {
@@ -52,6 +46,7 @@ export class BoardActionService {
 
   setMove(position: Position): void {
     this.changeDirection(position);
+    this.updateGameState();
 
     if (this.firstMove) {
       this.firstMove = false;
@@ -71,5 +66,38 @@ export class BoardActionService {
     this.playerDirection = { 1: null, 2: null };
     this.enabled = { x: null, y: null };
     this.currentPlayer.next(Math.random() < 0.5 ? 1 : 2);
+    this.gameOver.next(false);
+  }
+
+  setFields(fields: Field[][]): void {
+    this.fields = fields;
+  }
+
+  private checkGameOver(): boolean {
+    if (!this.fields.length) return false;
+    return this.fields.flat().every(field => !field.isSelectable());
+  }
+
+  private updateGameState(): void {
+    if (this.checkGameOver()) {
+      this.gameOver.next(true);
+    }
+  }
+
+  isEnabled(position: Position): boolean {
+    if (this.gameOver.value) {
+      return false;
+    }
+    if (this.firstMove) {
+      return true;
+    }
+    return this.enabled.x === null && this.enabled.y === null ||
+           position.x === this.enabled.x ||
+           position.y === this.enabled.y;
+  }
+
+  updateMove(position: Position): void {
+    this.changeDirection(position);
+    this.updateGameState();
   }
 }

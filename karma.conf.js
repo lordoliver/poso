@@ -18,7 +18,7 @@ export default function (config) {
       }
     },
     coverageReporter: {
-      dir: './coverage/poso-ng',
+      dir: './coverage/poso',
       subdir: '.',
       reporters: [
         { type: 'html' },
