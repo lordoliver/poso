@@ -7,7 +7,7 @@ import {
   MenuComponent,
   PlayerComponent
 } from './components';
-import { GameStateService } from './services/game-state.service';
+import { GameStateService, BoardActionService } from './services';
 
 @Component({
   selector: 'app-root',
@@ -20,13 +20,10 @@ export class AppComponent {
   title = 'POSO';
   currentPlayer = { name: 'Player 1', points: 0 };
   players = [
-    { name: 'Player 1', points: 0 },
+    { name: 'Player', points: 0 },
     { name: 'Computer', points: 0 }
   ];
-  menuItems: { name: string; cssClass: string; action: () => void; }[];
-
-  constructor(private gameStateService: GameStateService) {
-    this.menuItems = [
+  menuItems: { name: string; cssClass: string; action: () => void; }[] = [
     { 
       name: 'New Game',
       cssClass: 'new-game',
@@ -39,6 +36,17 @@ export class AppComponent {
       cssClass: 'rules',
       action: () => console.log('Show rules')
     }
-    ];
+  ];
+
+  constructor(
+    private gameStateService: GameStateService,
+    private boardActionService: BoardActionService
+  ) {
+    this.boardActionService.player1Points$.subscribe((points: number) => {
+      this.players[0].points = points;
+    });
+    this.boardActionService.player2Points$.subscribe((points: number) => {
+      this.players[1].points = points;
+    });
   }
 }

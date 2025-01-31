@@ -14,6 +14,7 @@ describe('BoardFieldComponent', () => {
       isEnabled: () => true,
       setMove: () => {},
       nextPlayer: () => {},
+      updatePoints: () => {},
       currentPlayer$: new BehaviorSubject(1)
     };
     const mockComputerService = {

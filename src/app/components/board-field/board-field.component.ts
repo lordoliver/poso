@@ -38,10 +38,12 @@ import { Subscription } from 'rxjs';
       transform: scale(1.05);
     }
     td.red { 
+      background-color: #ffebee;
       color: #d32f2f;
       font-weight: bold;
     }
     td.green { 
+      background-color: #e8f5e9;
       color: #388e3c;
       font-weight: bold;
     }
@@ -99,6 +101,7 @@ export class BoardFieldComponent implements OnInit, OnDestroy {
     event?.preventDefault();
     if (this.field.isSelectable()) {
       this.field.takeField();
+      this.boardActionService.updatePoints(this.field.value);
       this.boardActionService.setMove(this.field.position);
       this.boardActionService.nextPlayer();
       await this.computerService.computerMove();
