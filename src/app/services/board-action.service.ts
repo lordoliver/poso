@@ -13,11 +13,7 @@ export class BoardActionService {
   constructor(private playerService: PlayerService) {}
   
   private fields: Field[][] = [];
-  private lastPosition: Position | null = null;
-  private playerDirection: { [key: number]: 'horizontal' | 'vertical' | null } = {
-    1: null,
-    2: null
-  };
+  private currentPosition: Position | null = null;
   private enabled = { x: null as number | null, y: null as number | null };
 
   private changeDirection(position: Position): void {
@@ -28,13 +24,13 @@ export class BoardActionService {
     } else if (this.enabled.x !== null && this.enabled.y === null) {
       this.enabled = { x: null, y: position.y };
     } else if (this.enabled.x !== null && this.enabled.y !== null) {
-      if (this.lastPosition?.x === position.x) {
+      if (this.currentPosition?.x === position.x) {
         this.enabled = { x: null, y: position.y };
-      } else if (this.lastPosition?.y === position.y) {
+      } else if (this.currentPosition?.y === position.y) {
         this.enabled = { x: position.x, y: null };
       }
     }
-    this.lastPosition = position;
+    this.currentPosition = position;
   }
 
   nextPlayer(): void {
@@ -47,8 +43,7 @@ export class BoardActionService {
   }
 
   reset(): void {
-    this.lastPosition = null;
-    this.playerDirection = { 1: null, 2: null };
+    this.currentPosition = null;
     this.enabled = { x: null, y: null };
     this.gameOver.next(false);
     this.fields = [];
@@ -74,12 +69,15 @@ export class BoardActionService {
     }
   }
 
+  private canMove(): boolean {
+    return !this.gameOver.value;
+  }
+
   isEnabled(position: Position): boolean {
-    if (this.gameOver.value) {
-      return false;
-    }
-    return this.enabled.x === null && this.enabled.y === null ||
-           position.x === this.enabled.x ||
-           position.y === this.enabled.y;
+    return this.canMove() && (
+      (this.enabled.x === null && this.enabled.y === null) ||
+      position.x === this.enabled.x ||
+      position.y === this.enabled.y
+    );
   }
 }

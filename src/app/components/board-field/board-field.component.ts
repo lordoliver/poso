@@ -38,7 +38,8 @@ import { Subscription } from 'rxjs';
     }
     td.red { 
       background: 
-        linear-gradient(180deg, rgba(184,90,90,1) 0%, rgba(165,45,45,1) 100%);
+        linear-gradient(180deg, transparent 50%, rgba(91,0,0,0.4) 50%),
+        linear-gradient(90deg, rgba(184,90,90,1) 0%, rgba(165,45,45,1) 100%);
       border: 0.2em solid #661915;
       color: #fff;
       font-weight: bold;
@@ -46,7 +47,8 @@ import { Subscription } from 'rxjs';
     }
     td.green { 
       background:
-        linear-gradient(180deg, rgba(145,179,91,1) 0%, rgba(112,154,45,1) 100%);
+        linear-gradient(180deg, transparent 50%, rgba(50,50,0,0.25) 50%),
+        linear-gradient(90deg, rgba(145,179,91,1) 0%, rgba(112,154,45,1) 100%);
       border: 0.2em solid #45591a;
       color: #fff;
       font-weight: bold;
@@ -55,8 +57,16 @@ import { Subscription } from 'rxjs';
     td.disabled { 
       cursor: not-allowed;
       opacity: 0.7;
-      background: linear-gradient(45deg, rgba(0,0,0,0.2) 25%, transparent 25%, transparent 50%, rgba(0,0,0,0.2) 50%, rgba(0,0,0,0.2) 75%, transparent 75%, transparent);
-      background-size: 4px 4px;
+      position: relative;
+    }
+    td.disabled:after {
+      content: '';
+      position: absolute;
+      background: linear-gradient(45deg, rgba(0,0,0,0.5) 0%, rgba(0,0,0,0.5) 100%);
+      left: 0;
+      top: 0;
+      bottom: 0;
+      right: 0;
     }
     b {
       display: block;
@@ -84,6 +94,15 @@ export class BoardFieldComponent implements OnInit, OnDestroy {
   ngOnInit(): void {
     this.absVal = Math.abs(this.field.value);
     this.negative = this.field.value < 0;
+    
+    // Watch for changes in field active state
+    this.subscription.add(
+      this.boardActionService.gameOver$.subscribe(() => {
+        this.field.active = this.boardActionService.isEnabled(this.field.position);
+      })
+    );
+    
+    // Set initial active state
     this.field.active = this.boardActionService.isEnabled(this.field.position);
   }
 
@@ -95,6 +114,7 @@ export class BoardFieldComponent implements OnInit, OnDestroy {
     event?.preventDefault();
     if (this.field.isSelectable()) {
       this.field.takeField();
+      this.field.active = false;
       this.boardActionService.updatePoints(this.field.value);
       this.boardActionService.setMove(this.field.position);
       this.boardActionService.nextPlayer();

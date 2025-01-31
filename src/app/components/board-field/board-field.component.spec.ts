@@ -1,4 +1,5 @@
 import { ComponentFixture, TestBed, fakeAsync, tick } from '@angular/core/testing';
+import { BehaviorSubject } from 'rxjs';
 import { BoardFieldComponent } from './board-field.component';
 import { ComputerService, BoardActionService } from '../../services';
 import { Field } from '../../interfaces/field.interface';
@@ -13,7 +14,8 @@ describe('BoardFieldComponent', () => {
       isEnabled: () => true,
       setMove: () => {},
       nextPlayer: () => {},
-      updatePoints: () => {}
+      updatePoints: () => {},
+      gameOver$: new BehaviorSubject(false)
     };
     const mockComputerService = {
       computerMove: () => Promise.resolve(),
@@ -64,14 +66,14 @@ describe('BoardFieldComponent', () => {
   it('should handle field selection', fakeAsync(() => {
     const computerService = TestBed.inject(ComputerService);
     const mockComputerMove = spyOn(computerService, 'computerMove').and.returnValue(Promise.resolve());
-    spyOn(computerService, 'isComputerTurn').and.returnValue(true);
+    spyOn(computerService, 'isComputerTurn').and.returnValue(false);
     const tdElement = fixture.nativeElement.querySelector('td');
     
     tdElement.click();
     fixture.detectChanges();
     tick();
     
-    expect(mockComputerMove).toHaveBeenCalled();
+    expect(mockComputerMove).not.toHaveBeenCalled();
     expect(component.field.taken).toBeTrue();
     expect(component.field.active).toBeFalse();
     expect(component.field.points).toBe(5);

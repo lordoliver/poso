@@ -29,9 +29,27 @@ describe('BoardActionService', () => {
 
   it('should restrict moves after first selection', () => {
     service.setMove({ x: 3, y: 3 });
+    // After first move, both row and column should be enabled
+    expect(service.isEnabled({ x: 3, y: 4 })).toBeTrue(); // Same row
+    expect(service.isEnabled({ x: 4, y: 3 })).toBeTrue(); // Same column
+    expect(service.isEnabled({ x: 0, y: 0 })).toBeFalse(); // Different row and column
+  });
+
+  it('should handle direction changes correctly', () => {
+    // First move enables both row and column
+    service.setMove({ x: 3, y: 3 });
     expect(service.isEnabled({ x: 3, y: 4 })).toBeTrue();
     expect(service.isEnabled({ x: 4, y: 3 })).toBeTrue();
-    expect(service.isEnabled({ x: 0, y: 0 })).toBeFalse();
+
+    // Moving in same row switches to column-only
+    service.setMove({ x: 3, y: 4 });
+    expect(service.isEnabled({ x: 3, y: 5 })).toBeFalse(); // Same row not allowed
+    expect(service.isEnabled({ x: 2, y: 4 })).toBeTrue();  // Same column allowed
+    
+    // Moving in new column switches to row-only
+    service.setMove({ x: 2, y: 4 });
+    expect(service.isEnabled({ x: 2, y: 5 })).toBeTrue();  // Same row allowed
+    expect(service.isEnabled({ x: 1, y: 4 })).toBeFalse(); // Same column not allowed
   });
 
   it('should reset game state correctly', () => {
